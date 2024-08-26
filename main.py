@@ -1,13 +1,16 @@
 """
 This module provides a folder synchronization utility.
 
-This module defines a command-line utility for synchronizing the contents of a source folder
-with an output folder. It allows you to specify the source folder, output folder, synchronization
-interval, and log file path as command-line arguments. The utility periodically checks for changes
-in the source folder and updates the output folder accordingly. It also logs the copy actions.
+This module defines a command-line utility for synchronizing the contents of a
+source folder with an output folder. It allows you to specify the
+source folder, output folder, synchronization interval, and log file path as
+command-line arguments. The utility periodically checks for changes in the
+source folder and updates the output folder accordingly. It also logs the copy
+actions.
 
 Usage:
-    python main.py -s <source_folder> -o <output_folder> -i <interval> -l <log_file>
+    python main.py -s <source_folder> -o <output_folder> -i <interval>
+      -l <log_file>
 
 Examples:
     1. Synchronize the 'source_folder' with default output folder and log file:
@@ -16,7 +19,8 @@ Examples:
     2. Synchronize the 'source_folder' with a custom output folder and log file:
        python main.py -s source_folder -o custom_output -l custom_log.log
 
-    3. Synchronize the 'source_folder' with a custom synchronization interval (e.g., 60 seconds):
+    3. Synchronize the 'source_folder' with a custom synchronization interval
+       (e.g., 60 seconds):
        python main.py -s source_folder -i 60
 
 Author: Ivan Shkvyr
@@ -34,15 +38,17 @@ import os
 
 def main_parser():
     """
-    Parse command line arguments and set default values for source, output, interval, and
-    logging file.
+    Parse command line arguments and set default values for source, output,
+    interval, and logging file.
 
-    This function parses the command line arguments using argparse and sets default values
-    for source, output, interval, and logging file if they are not provided by the user.
+    This function parses the command line arguments using argparse and sets
+    default values for source, output, interval, and logging file if they are
+    not provided by the user.
 
     Returns:
-        Tuple[Path, Path, int, Path]: A tuple containing the source folder, output folder,
-        synchronization interval (in seconds), and the path to the log file.
+        Tuple[Path, Path, int, Path]: A tuple containing the source folder,
+        output folder, synchronization interval (in seconds), and the path to
+        the log file.
     """
     parser = argparse.ArgumentParser(description="Synchronizes folders")
     parser.add_argument("--source", "-s", help="Source folder", required=True)
@@ -80,13 +86,15 @@ def grabs_folder(path: Path):
     """
     Get a list of files and directories in the specified folder.
 
-    This function returns a list of files and directories found in the specified folder.
+    This function returns a list of files and directories found in the
+    specified folder.
 
     Parameters:
         path (Path): The path to the folder to scan.
 
     Returns:
-        List[Path]: A list of Path objects representing files and directories in the folder.
+        List[Path]: A list of Path objects representing files and directories
+        in the folder.
     """
     files_in_base_folder = []
     for el in path.iterdir():
@@ -98,8 +106,9 @@ async def copy_file(base_path: Path, out_path: Path):
     """
     Copy a file or directory from the source folder to the output folder.
 
-    This function copies a file or directory from the source folder to the output folder.
-    It logs the action and handles exceptions if the copy operation fails.
+    This function copies a file or directory from the source folder to the
+    output folder. It logs the action and handles exceptions if the copy
+    operation fails.
 
     Parameters:
         base_path (Path): The path to the source file or directory.
@@ -126,9 +135,10 @@ async def main():
     """
     Synchronize folders at regular intervals.
 
-    This is the main function of the program. It configures logging, parses command line arguments,
-    and synchronizes the source folder with the output folder at regular intervals. It clears the
-    output folder before each synchronization and logs the copy actions.
+    This is the main function of the program. It configures logging, parses
+    command line arguments, and synchronizes the source folder with the output
+    folder at regular intervals. It clears the output folder before each
+    synchronization and logs the copy actions.
 
     Returns:
         None
@@ -149,7 +159,11 @@ async def main():
     base_folder, output_folder, interval, loggingfile = main_parser()
 
     # Setting up a file log handler
-    file_handler = RotatingFileHandler(loggingfile, maxBytes=1024000, backupCount=3)
+    file_handler = RotatingFileHandler(
+                                       loggingfile,
+                                       maxBytes=1024000,
+                                       backupCount=3,
+                                      )
     file_handler.setFormatter(log_format)
     root_logger.addHandler(file_handler)
 
